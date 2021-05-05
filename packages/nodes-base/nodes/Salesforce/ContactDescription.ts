@@ -31,6 +31,11 @@ export const contactOperations = [
 				description: 'Create a contact',
 			},
 			{
+				name: 'Create/Update',
+				value: 'upsert',
+				description: 'Create/Update a contact',
+			},
+			{
 				name: 'Delete',
 				value: 'delete',
 				description: 'Delete a contact',
@@ -67,6 +72,46 @@ export const contactFields = [
 	/*                                contact:create                              */
 	/* -------------------------------------------------------------------------- */
 	{
+		displayName: 'External ID',
+		name: 'externalId',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getFields',
+		},
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'contact',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
+		description: `If the external ID is not matched, then a new record is created.</br>
+						If the external ID is matched once, then the record is updated.</br>
+						If the external ID is matched multiple times, then a 300 error is reported, and the record is neither created nor updated.`,
+	},
+	{
+		displayName: 'External ID Value',
+		name: 'externalIdValue',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'contact',
+				],
+				operation: [
+					'upsert',
+				],
+			},
+		},
+	},
+	{
 		displayName: 'Last Name',
 		name: 'lastname',
 		type: 'string',
@@ -97,6 +142,7 @@ export const contactFields = [
 				],
 				operation: [
 					'create',
+					'upsert',
 				],
 			},
 		},
@@ -231,6 +277,20 @@ export const contactFields = [
 				default: '',
 				description: `references the ID of a contact in Data.com.
 				If a contact has a value in this field, it means that a contact was imported as a contact from Data.com.`,
+			},
+			{
+				displayName: 'Last Name',
+				name: 'lastname',
+				type: 'string',
+				default: '',
+				displayOptions: {
+					show: {
+						'/operation': [
+							'upsert',
+						],
+					},
+				},
+				description: 'Required. Last name of the contact. Limited to 80 characters.',
 			},
 			{
 				displayName: 'Lead Source',
@@ -642,7 +702,7 @@ export const contactFields = [
 	},
 
 	/* -------------------------------------------------------------------------- */
-	/*                                  contact:get                                  */
+	/*                                  contact:get                               */
 	/* -------------------------------------------------------------------------- */
 	{
 		displayName: 'Contact ID',
